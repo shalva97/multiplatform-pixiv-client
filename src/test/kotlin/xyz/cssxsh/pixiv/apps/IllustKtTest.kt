@@ -3,7 +3,6 @@ package xyz.cssxsh.pixiv.apps
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 import xyz.cssxsh.pixiv.RankMode
-import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -100,7 +99,7 @@ internal class IllustKtTest : AppApiKtTest() {
 
     @Test
     fun timeanddate() = runBlocking {
-        println(Locale.CHINA.language)
+//        println(Locale.CHINA.language)
     }
 
 }

@@ -20,9 +20,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.Clock
 import xyz.cssxsh.pixiv.auth.*
 import xyz.cssxsh.pixiv.exception.TransferExceptionHandler
-import xyz.cssxsh.pixiv.tool.RubyDns
-import xyz.cssxsh.pixiv.tool.RubySSLSocketFactory
-import xyz.cssxsh.pixiv.tool.RubyX509TrustManager
 
 public abstract class PixivAuthClient : PixivAppClient, Closeable {
 
@@ -99,21 +96,7 @@ public abstract class PixivAuthClient : PixivAppClient, Closeable {
                 }
             })
         }
-        engine {
-            config {
-                with(config) {
-                    if (proxy.isNotBlank()) {
-                        proxy(Url(proxy).toProxy())
-                    } else if (config.sni) {
-                        sslSocketFactory(RubySSLSocketFactory, RubyX509TrustManager)
-                        hostnameVerifier { _, _ -> true }
-                    }
-                    dns(RubyDns(dns, host))
-                }
-                // StreamResetException: stream was reset: REFUSED_STREAM
-                // protocols(listOf(Protocol.HTTP_1_1))
-            }
-        }
+        // TODO set proxy, dns and SSL based on config
     }
 
     protected open val clients: MutableList<HttpClient> by lazy { MutableList(3) { client() } }

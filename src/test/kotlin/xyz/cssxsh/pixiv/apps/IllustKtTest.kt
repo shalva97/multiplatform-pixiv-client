@@ -7,6 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class IllustKtTest : AppApiKtTest() {
 
@@ -99,9 +100,7 @@ internal class IllustKtTest : AppApiKtTest() {
 
     @Test
     fun timeanddate() = runBlocking {
-        val pid = 83919385L
-        val res = client.illustDetail(pid = pid)
-        println(res.illust.createAt)
+        println(500000.milliseconds)
     }
 
 }

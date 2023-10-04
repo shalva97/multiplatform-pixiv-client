@@ -6,6 +6,7 @@ import kotlinx.coroutines.channels.Channel
 import xyz.cssxsh.pixiv.HTTP_KILO
 import kotlin.system.measureTimeMillis
 import kotlin.test.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class PixivDownloaderTest {
 
@@ -65,7 +66,7 @@ internal class PixivDownloaderTest {
                     }
                     val (pid, index) = regex.find(url.encodedPath)!!.destructured
                     val page = """${pid}#${index.toInt().plus(1)}"""
-                    println("| [$page](https://www.pixiv.net/artworks/${page}) | ${bytes.length} | ${java.time.Duration.ofMillis(millis)} |")
+                    println("| [$page](https://www.pixiv.net/artworks/${page}) | ${bytes.length} | ${millis.milliseconds} |")
                 }
             }
         }
@@ -84,7 +85,7 @@ internal class PixivDownloaderTest {
                 artworks.flatMap { artwork -> download(target = artwork) }
                     .awaitAll()
             }
-            java.time.Duration.ofMillis(millis)
+            millis.milliseconds
         }
         println("## Async Duration")
         println("| ASYNC | DURATION |")

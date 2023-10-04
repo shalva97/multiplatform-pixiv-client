@@ -9,25 +9,22 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
-import okhttp3.ConnectionPool
-import xyz.cssxsh.pixiv.*
-import xyz.cssxsh.pixiv.exception.*
-import java.net.*
-import java.util.concurrent.*
+import kotlinx.coroutines.channels.Channel
+import xyz.cssxsh.pixiv.DEFAULT_PIXIV_HOST
+import xyz.cssxsh.pixiv.HTTP_KILO
+import xyz.cssxsh.pixiv.JAPAN_DNS
+import xyz.cssxsh.pixiv.exception.MatchContentLengthException
+import xyz.cssxsh.pixiv.exception.NoCacheException
 
 public open class PixivDownloader(
     async: Int = 32,
     protected open val blockSize: Int = 512 * HTTP_KILO, // HTTP use 1022 no 1024,
-    protected open val proxy: Proxy? = null,
     protected open val doh: String = JAPAN_DNS,
     protected open val host: Map<String, List<String>> = DEFAULT_PIXIV_HOST,
 ) {
 
     protected open val timeout: Long = 10 * 1000L
-
     protected open val ignore: suspend (Throwable) -> Boolean = { it is IOException }
-
     protected open val channel: Channel<Int> = Channel(async)
 
     protected open fun client(): HttpClient = HttpClient(OkHttp) {
@@ -43,15 +40,7 @@ public open class PixivDownloader(
             header(HttpHeaders.Pragma, "no-cache")
         }
         expectSuccess = true
-        engine {
-            config {
-                connectionPool(ConnectionPool(5, 10, TimeUnit.MINUTES))
-                sslSocketFactory(RubySSLSocketFactory, RubyX509TrustManager)
-                hostnameVerifier { _, _ -> true }
-                proxy(this@PixivDownloader.proxy)
-                dns(RubyDns(doh, host))
-            }
-        }
+        // TODO configure engine with DNS and SSL
     }
 
     protected open val clients: MutableList<HttpClient> by lazy { MutableList(8) { client() } }

@@ -37,6 +37,11 @@ dependencies {
     implementation("com.squareup.okio:okio:3.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
     testImplementation("org.slf4j:slf4j-simple")
+
+    implementation(platform("org.kotlincrypto.hash:bom:0.3.0"))
+    // SHA-224, SHA-256, SHA-384, SHA-512
+    // SHA-512/t, SHA-512/224, SHA-512/256
+    implementation("org.kotlincrypto.hash:sha2")
 }
 
 kotlin {

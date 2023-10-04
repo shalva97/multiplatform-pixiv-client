@@ -5,9 +5,9 @@ import io.ktor.client.call.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.util.*
+import org.kotlincrypto.hash.sha2.SHA256
 import xyz.cssxsh.pixiv.ANDROID_CLIENT_ID
 import xyz.cssxsh.pixiv.ANDROID_CLIENT_SECRET
-import java.security.MessageDigest
 import kotlin.random.Random
 
 public const val OAUTH_TOKEN_URL: String = "https://oauth.secure.pixiv.net/auth/token"
@@ -35,8 +35,8 @@ public const val GIGYA_AUTH_URL: String = "https://accounts.pixiv.net/gigya-auth
 public const val SOCIALIZE_LOGIN_URL: String = "https://socialize.gigya.com/socialize.login"
 
 private fun String.sha256(): ByteArray {
-    return MessageDigest.getInstance("SHA-256")
-        .digest(toByteArray(Charsets.US_ASCII))
+    val digest = SHA256()
+    return digest.digest(toByteArray(Charsets.US_ASCII))
 }
 
 private const val VERIFIER_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"

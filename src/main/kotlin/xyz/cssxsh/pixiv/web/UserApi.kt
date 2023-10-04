@@ -2,8 +2,9 @@ package xyz.cssxsh.pixiv.web
 
 import io.ktor.client.request.*
 import io.ktor.http.*
-import xyz.cssxsh.pixiv.*
-import java.util.*
+import xyz.cssxsh.pixiv.CategoryType
+import xyz.cssxsh.pixiv.FollowType
+import xyz.cssxsh.pixiv.PixivWebClient
 
 private fun referer(uid: Long) = "https://www.pixiv.net/users/${uid}"
 
@@ -11,27 +12,27 @@ private fun profile(uid: Long, type: String) = "https://www.pixiv.net/ajax/user/
 
 public suspend fun PixivWebClient.ajaxProfileAll(
     uid: Long,
-    locale: Locale = Locale.CHINA,
+    locale: String = "zh",
 ): UserProfileAll = ajax(profile(uid = uid, type = "all")) {
     header(HttpHeaders.Referrer, referer(uid = uid))
 
-    parameter("lang", locale.language)
+    parameter("lang", locale)
 }
 
 public suspend fun PixivWebClient.ajaxProfileTop(
     uid: Long,
-    locale: Locale = Locale.CHINA,
+    locale: String = "zh",
 ): UserProfileTop = ajax(profile(uid = uid, type = "top")) {
     header(HttpHeaders.Referrer, referer(uid = uid))
 
-    parameter("lang", locale.language)
+    parameter("lang", locale)
 }
 
 public suspend fun PixivWebClient.ajaxProfileIllusts(
     uid: Long,
     ids: Set<Long>,
     category: CategoryType,
-    locale: Locale = Locale.CHINA,
+    locale: String = "zh",
 ): UserProfileIllusts = ajax(profile(uid = uid, type = "illusts")) {
     header(HttpHeaders.Referrer, referer(uid = uid))
 
@@ -40,7 +41,7 @@ public suspend fun PixivWebClient.ajaxProfileIllusts(
     }
     parameter("work_category", category)
     parameter("is_first_page", 1)
-    parameter("lang", locale.language)
+    parameter("lang", locale)
 }
 
 private fun following(uid: Long) = "https://www.pixiv.net/ajax/user/${uid}/following"
@@ -51,7 +52,7 @@ public suspend fun PixivWebClient.ajaxFollowing(
     limit: Int,
     rest: FollowType = FollowType.SHOW,
     tag: String = "",
-    locale: Locale = Locale.CHINA,
+    locale: String = "zh",
 ): UserFollowing = ajax(following(uid = uid)) {
     header(HttpHeaders.Referrer, referer(uid = uid))
 
@@ -59,7 +60,7 @@ public suspend fun PixivWebClient.ajaxFollowing(
     parameter("limit", limit)
     parameter("rest", rest)
     parameter("tag", tag)
-    parameter("lang", locale.language)
+    parameter("lang", locale)
 }
 
 private fun bookmarks(uid: Long, type: String) = "https://www.pixiv.net/ajax/user/${uid}/${type}/bookmarks"
@@ -70,7 +71,7 @@ public suspend fun PixivWebClient.ajaxBookmarks(
     limit: Int,
     rest: FollowType = FollowType.SHOW,
     tag: String = "",
-    locale: Locale = Locale.CHINA,
+    locale: String = "zh",
 ): UserBookmarks<WebIllust> = ajax(bookmarks(uid = uid, type = "illust")) {
     header(HttpHeaders.Referrer, referer(uid = uid))
 
@@ -78,7 +79,7 @@ public suspend fun PixivWebClient.ajaxBookmarks(
     parameter("limit", limit)
     parameter("rest", rest)
     parameter("tag", tag)
-    parameter("lang", locale.language)
+    parameter("lang", locale)
 }
 
 // https://www.pixiv.net/ajax/user/478993/illusts/bookmark/tags?lang=zh

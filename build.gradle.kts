@@ -1,63 +1,66 @@
+@file:Suppress("OPT_IN_USAGE")
+
 import java.util.*
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.serialization") version "1.8.22"
-    id("me.him188.maven-central-publish") version "1.0.0-dev-3"
+    kotlin("multiplatform") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
     id("com.github.gmazzo.buildconfig") version "3.1.0"
 }
 
 group = "xyz.cssxsh.pixiv"
 version = "1.3.1"
 
-mavenCentralPublish {
-    useCentralS01()
-    singleDevGithubProject("cssxsh", "pixiv-client")
-    licenseFromGitHubProject("AGPL-3.0")
-    workingDir = System.getenv("PUBLICATION_TEMP")?.let { file(it).resolve(projectName) }
-        ?: buildDir.resolve("publishing-tmp")
-}
-
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-    api(platform("io.ktor:ktor-bom:2.3.3"))
-    api("io.ktor:ktor-client-auth")
-    api("io.ktor:ktor-client-encoding")
-    api("io.ktor:ktor-client-okhttp")
-    api("io.ktor:ktor-client-content-negotiation")
-    api("io.ktor:ktor-serialization-kotlinx-json")
-    api(platform("com.squareup.okhttp3:okhttp-bom:4.11.0"))
-    api("com.squareup.okhttp3:okhttp-dnsoverhttps")
-    implementation(platform("org.slf4j:slf4j-parent:2.0.7"))
-    implementation("com.squareup.okio:okio:3.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
-    testImplementation("org.slf4j:slf4j-simple")
-
-    implementation(platform("org.kotlincrypto.hash:bom:0.3.0"))
-    // SHA-224, SHA-256, SHA-384, SHA-512
-    // SHA-512/t, SHA-512/224, SHA-512/256
-    implementation("org.kotlincrypto.hash:sha2")
-}
-
 kotlin {
     explicitApi()
-    target.compilations {
-        all {
-            kotlinOptions {
-                jvmTarget = "11"
+    jvmToolchain(17)
+    targetHierarchy.default()
+    jvm()
+    macosX64()
+    linuxX64()
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(platform("io.ktor:ktor-bom:2.3.3"))
+                api("io.ktor:ktor-client-auth")
+                api("io.ktor:ktor-client-encoding")
+                api("io.ktor:ktor-client-cio")
+                api("io.ktor:ktor-client-content-negotiation")
+                api("io.ktor:ktor-serialization-kotlinx-json")
+//                api(platform("com.squareup.okhttp3:okhttp-bom:4.11.0"))
+                implementation("com.squareup.okio:okio:3.5.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+
+                implementation(platform("org.kotlincrypto.hash:bom:0.3.0"))
+                implementation("org.kotlincrypto.hash:sha2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+            }
+        }
+        commonTest.configure {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+            }
+        }
+
+        val jvmMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-okhttp")
+            }
+        }
+
+        val nativeMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-curl")
             }
         }
     }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
 }
 
 val properties = Properties().apply {

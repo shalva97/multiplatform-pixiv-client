@@ -5,8 +5,10 @@ import io.ktor.client.statement.*
 import io.ktor.util.*
 import kotlinx.coroutines.*
 
-public class MatchContentLengthException(response: HttpResponse) :
-    ResponseException(response, "<not match content length>") {
+public class MatchContentLengthException(
+    response: HttpResponse
+) : ResponseException(response, "<not match content length>") {
+
     init {
         response.call.cancel(super.message!!)
     }

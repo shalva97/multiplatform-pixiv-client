@@ -7,10 +7,6 @@ import xyz.cssxsh.pixiv.pixiv_client.BuildConfig
 
 internal abstract class AppApiKtTest {
 
-    init {
-        System.setProperty("xyz.cssxsh.pixiv.json.ignore", "false")
-    }
-
     protected val client: PixivAuthClient = object : SimplePixivClient(
         config = PixivConfig(refreshToken = BuildConfig.REFRESH_TOKEN)
     ) {

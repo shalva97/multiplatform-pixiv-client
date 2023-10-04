@@ -1,13 +1,15 @@
 package xyz.cssxsh.pixiv
 
 import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.compression.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.cookies.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.utils.io.core.*
 import xyz.cssxsh.pixiv.exception.TransferExceptionHandler
+import kotlin.use
 
 abstract class WebTest {
 
@@ -19,7 +21,7 @@ abstract class WebTest {
 
             override val storage get() = this@WebTest.storage
 
-            private fun client(): HttpClient = HttpClient(OkHttp) {
+            private fun client(): HttpClient = HttpClient(CIO) {
                 install(ContentNegotiation) {
                     json(json = PixivJson)
                 }

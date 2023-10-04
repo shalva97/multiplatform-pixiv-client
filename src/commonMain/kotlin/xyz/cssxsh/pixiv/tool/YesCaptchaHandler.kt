@@ -2,7 +2,7 @@ package xyz.cssxsh.pixiv.tool
 
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.okhttp.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.network.sockets.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -20,7 +20,7 @@ import xyz.cssxsh.pixiv.*
  */
 public class YesCaptchaHandler(private val clientKey: String, public val host: String = "api.yescaptcha.com") :
     CaptchaHandler {
-    private val client = HttpClient(OkHttp) {
+    private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(PixivJson)
         }

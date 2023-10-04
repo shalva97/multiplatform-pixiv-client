@@ -1,7 +1,7 @@
 package xyz.cssxsh.pixiv.tool
 
 import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.compression.*
 import io.ktor.client.request.*
@@ -27,7 +27,7 @@ public open class PixivDownloader(
     protected open val ignore: suspend (Throwable) -> Boolean = { it is IOException }
     protected open val channel: Channel<Int> = Channel(async)
 
-    protected open fun client(): HttpClient = HttpClient(OkHttp) {
+    protected open fun client(): HttpClient = HttpClient(CIO) {
         ContentEncoding()
         install(HttpTimeout) {
             socketTimeoutMillis = timeout

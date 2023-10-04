@@ -2,7 +2,7 @@ package xyz.cssxsh.pixiv.tool
 
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.okhttp.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.compression.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -15,7 +15,7 @@ import xyz.cssxsh.pixiv.*
  * [2captcha-api](https://2captcha.com/2captcha-api#solving_recaptchav2_new)
  */
 public class TwoCaptchaHandler(private val clientKey: String) : CaptchaHandler {
-    private val client = HttpClient(OkHttp) {
+    private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(PixivJson)
         }

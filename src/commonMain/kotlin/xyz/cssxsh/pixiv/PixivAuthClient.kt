@@ -1,7 +1,7 @@
 package xyz.cssxsh.pixiv
 
 import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
+import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.compression.*
@@ -12,7 +12,6 @@ import io.ktor.http.*
 import io.ktor.http.auth.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.core.*
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
@@ -20,6 +19,8 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.Clock
 import xyz.cssxsh.pixiv.auth.*
 import xyz.cssxsh.pixiv.exception.TransferExceptionHandler
+
+internal expect val httpClient: HttpClientEngineFactory<*>
 
 public abstract class PixivAuthClient : PixivAppClient, Closeable {
 
@@ -36,7 +37,7 @@ public abstract class PixivAuthClient : PixivAppClient, Closeable {
 
     protected open val timeout: Long = 30_000L
 
-    protected open fun client(): HttpClient = HttpClient(OkHttp) {
+    protected open fun client(): HttpClient = HttpClient(httpClient) {
         install(ContentNegotiation) {
             json(json = PixivJson)
         }
@@ -57,7 +58,9 @@ public abstract class PixivAuthClient : PixivAppClient, Closeable {
             header(HttpHeaders.CacheControl, "no-cache")
             header(HttpHeaders.Connection, "keep-alive")
             header(HttpHeaders.Pragma, "no-cache")
-            config.headers.forEach(::header)
+            config.headers.forEach {
+                header(it.key, it.value)
+            }
             url("https://www.pixiv.net")
         }
         Auth {
@@ -117,7 +120,7 @@ public abstract class PixivAuthClient : PixivAppClient, Closeable {
                 }
             }
         }
-        throw CancellationException()
+        throw kotlin.coroutines.cancellation.CancellationException()
     }
 
     protected open val mutex: Mutex = Mutex()

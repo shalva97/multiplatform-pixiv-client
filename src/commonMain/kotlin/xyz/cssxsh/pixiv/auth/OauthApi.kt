@@ -5,6 +5,8 @@ import io.ktor.client.call.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.util.*
+import io.ktor.utils.io.charsets.*
+import io.ktor.utils.io.core.*
 import org.kotlincrypto.hash.sha2.SHA256
 import xyz.cssxsh.pixiv.ANDROID_CLIENT_ID
 import xyz.cssxsh.pixiv.ANDROID_CLIENT_SECRET
@@ -36,7 +38,7 @@ public const val SOCIALIZE_LOGIN_URL: String = "https://socialize.gigya.com/soci
 
 private fun String.sha256(): ByteArray {
     val digest = SHA256()
-    return digest.digest(toByteArray(Charsets.US_ASCII))
+    return digest.digest(toByteArray(Charsets.UTF_8))
 }
 
 private const val VERIFIER_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"

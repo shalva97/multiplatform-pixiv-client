@@ -17,7 +17,7 @@ public typealias HeadersMap = Map<String, String>
 public typealias FileUrls = Map<String, String>
 
 public val PixivJson: Json = Json {
-    ignoreUnknownKeys = System.getProperty("xyz.cssxsh.pixiv.json.ignore", "true").toBoolean()
+    ignoreUnknownKeys = true
     allowSpecialFloatingPointValues = true
 }
 

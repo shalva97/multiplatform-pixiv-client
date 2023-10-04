@@ -99,7 +99,7 @@ internal class IllustKtTest : AppApiKtTest() {
 
     @Test
     fun timeanddate() = runBlocking {
-//        println(Locale.CHINA.language)
+        println("Hello world")
     }
 
 }

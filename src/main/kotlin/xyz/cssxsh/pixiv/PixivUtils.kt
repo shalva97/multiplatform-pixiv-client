@@ -11,10 +11,6 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import xyz.cssxsh.pixiv.auth.AuthResult
-import xyz.cssxsh.pixiv.exception.ProxyException
-import java.net.InetSocketAddress
-import java.net.Proxy
-import java.util.*
 
 public typealias HeadersMap = Map<String, String>
 
@@ -32,7 +28,7 @@ public const val IOS_CLIENT_ID: String = "KzEZED7aC0vird8jWyHM38mXjNTY"
 public const val IOS_CLIENT_SECRET: String = "W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP"
 
 public val IOS_HEADERS: HeadersMap = mapOf(
-    HttpHeaders.AcceptLanguage to Locale.CHINA.language,
+    HttpHeaders.AcceptLanguage to "zh",
     HttpHeaders.UserAgent to "PixivIOSApp/7.13.3 (iOS 14.6; iPhone13,2)",
     "App-OS-Version" to "14.6",
     "App-OS" to "ios"
@@ -43,7 +39,7 @@ public const val ANDROID_CLIENT_ID: String = "MOBrBDS8blbauoSck0ZfDbtuzpyT"
 public const val ANDROID_CLIENT_SECRET: String = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj"
 
 public val ANDROID_HEADERS: HeadersMap = mapOf(
-    HttpHeaders.AcceptLanguage to Locale.CHINA.language,
+    HttpHeaders.AcceptLanguage to "zh",
     HttpHeaders.UserAgent to "PixivAndroidApp/6.45.0 (Android 8.0)",
     "App-OS-Version" to "8.0",
     "App-OS" to "android"
@@ -67,15 +63,6 @@ public const val NO_PROFILE_IMAGE: String = "https://s.pximg.net/common/images/n
 public const val LIMIT_UNKNOWN_IMAGE: String = "https://s.pximg.net/common/images/limit_unknown_360.png"
 
 public const val LIMIT_MYPIXIV_IMAGE: String = "https://s.pximg.net/common/images/limit_mypixiv_360.png"
-
-internal fun Url.toProxy(): Proxy {
-    val type = when (protocol) {
-        URLProtocol.SOCKS -> Proxy.Type.SOCKS
-        URLProtocol.HTTP -> Proxy.Type.HTTP
-        else -> throw ProxyException(this)
-    }
-    return Proxy(type, InetSocketAddress(host, port))
-}
 
 internal fun AuthResult.toBearerTokens(): BearerTokens = BearerTokens(accessToken, refreshToken)
 

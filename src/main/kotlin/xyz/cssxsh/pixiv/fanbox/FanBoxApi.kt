@@ -4,13 +4,14 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.cookies.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.sync.*
-import xyz.cssxsh.pixiv.*
-import java.util.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import xyz.cssxsh.pixiv.PixivJson
+import xyz.cssxsh.pixiv.PixivWebClient
 
 public abstract class FanBoxApi {
     public companion object {
-        internal val contexts = WeakHashMap<String, MetaData>()
+        internal val contexts = HashMap<String, MetaData>()
 
         internal val mutex = Mutex()
     }

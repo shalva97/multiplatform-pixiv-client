@@ -97,9 +97,11 @@ internal class IllustKtTest : AppApiKtTest() {
         }
     }
 
-    @Test
+    //    @Test
     fun timeanddate() = runBlocking {
-        println("Hello world")
+        val pid = 83919385L
+        val res = client.illustDetail(pid = pid)
+        println(res.illust)
     }
 
 }

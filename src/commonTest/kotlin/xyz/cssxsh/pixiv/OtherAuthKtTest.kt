@@ -65,6 +65,7 @@ internal class OtherAuthKtTest {
     fun cookie(): Unit = runBlocking {
         val result = client.cookie {
             PixivJson.decodeFromString<List<EditThisCookie>>(
+                // the line below might show syntax errors but should still work
                 FileSystem.SYSTEM.read(".run/cookie.json".toPath()) { readUtf8() }
             ).map { it.toCookie() }
         }

@@ -6,10 +6,11 @@ plugins {
     kotlin("multiplatform") version "1.9.10"
     kotlin("plugin.serialization") version "1.9.10"
     id("com.github.gmazzo.buildconfig") version "3.1.0"
+    `maven-publish`
 }
 
-group = "xyz.cssxsh.pixiv"
-version = "1.3.1"
+group = "io.github.shalva97"
+version = "2.0.0"
 
 repositories {
     mavenLocal()

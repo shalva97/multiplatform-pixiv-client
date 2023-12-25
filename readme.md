@@ -17,11 +17,7 @@ Consider adding WebApi support in the future.
 ## Gradle
 
 ```kotlin
-repositories {
-    mavenCentral()
-}
+maven { url 'https://jitpack.io' }
 
-dependencies {
-    implementation("xyz.cssxsh.pixiv:pixiv-client:${version}")
-}
+implementation 'com.github.shalva97.multiplatform-pixiv-client:pixiv-client:2.0.4'
 ```

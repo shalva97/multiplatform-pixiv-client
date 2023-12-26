@@ -81,8 +81,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/shalva97/multiplatform-pixiv-client")
             credentials {
-                username = properties["gpr.user"] as String? ?: System.getenv("USERNAME")
-                password = properties["gpr.key"] as String? ?: System.getenv("TOKEN")
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

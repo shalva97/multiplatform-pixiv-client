@@ -13,7 +13,6 @@ group = "io.github.shalva97"
 version = "2.0.4"
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
@@ -74,4 +73,22 @@ val properties = Properties().apply {
 
 buildConfig {
     buildConfigField("String", "REFRESH_TOKEN", provider { "\"${properties["refresh_token"]}\"" })
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/shalva97/multiplatform-pixiv-client")
+            credentials {
+                username = properties["gpr.user"] as String? ?: System.getenv("USERNAME")
+                password = properties["gpr.key"] as String? ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["kotlin"])
+        }
+    }
 }
